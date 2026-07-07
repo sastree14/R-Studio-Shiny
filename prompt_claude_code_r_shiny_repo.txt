@@ -1,0 +1,590 @@
+PROMPT PARA CLAUDE CODE — CREAR REPOSITORIO COMPLETO R SHINY + GITHUB ACTIONS
+
+Contexto general
+----------------
+
+Estoy creando un repositorio público llamado:
+
+R-Studio-Shiny
+
+El objetivo de este repositorio es tener una aplicación R Shiny completa, bien estructurada y profesional, que sirva como ejemplo demostrable de desarrollo, mantenimiento y evolución de una aplicación Shiny orientada a indicadores territoriales.
+
+Quiero que actúes como un desarrollador senior de R/Shiny, estadística aplicada, visualización de datos y mantenimiento de software analítico. Necesito que montes todo el repositorio desde cero, con una estructura limpia, reproducible, documentada y preparada para enseñar como portfolio profesional.
+
+La aplicación debe parecer una aplicación realista de indicadores territoriales, similar a una app usada por una consultora, administración pública, área de salud pública, bioestadística o análisis territorial.
+
+No importa si los datos son inventados. Puedes generarlos tú mismo dentro del repositorio mediante scripts reproducibles. Lo importante es que la app sea funcional, profesional y permita demostrar experiencia en:
+
+- R avanzado.
+- R Shiny.
+- Programación reactiva.
+- Leaflet.
+- sf.
+- plotly.
+- reactable.
+- modularización.
+- renv.
+- Git/GitHub.
+- mantenimiento de código existente.
+- buenas prácticas de documentación.
+- estructura profesional de proyecto.
+
+Objetivo de la aplicación
+-------------------------
+
+Crear una aplicación R Shiny llamada:
+
+"Indicadors Territorials de Salut i Demografia"
+
+La aplicación debe estar en catalán en la interfaz visible para el usuario.
+
+La app debe permitir explorar indicadores territoriales simulados de Cataluña o de una región ficticia inspirada en Cataluña. Puede usar municipios ficticios o datos inventados, pero deben tener sentido estadístico.
+
+La aplicación debe incluir:
+
+1. Panel de filtros.
+2. Mapa interactivo.
+3. Gráficos interactivos.
+4. Tabla interactiva.
+5. KPIs principales.
+6. Descarga de datos filtrados.
+7. Documentación clara.
+8. Código modular.
+9. Workflow manual de GitHub Actions para validar que la app instala dependencias y se ejecuta correctamente.
+10. README profesional explicando cómo clonar, instalar, ejecutar y mantener la app.
+
+IMPORTANTE SOBRE LOCALHOST Y GITHUB ACTIONS
+-------------------------------------------
+
+Quiero que el repositorio permita ejecutar la app localmente en mi ordenador con RStudio.
+
+El flujo local debe ser:
+
+1. Clonar el repositorio.
+2. Abrir el proyecto en RStudio.
+3. Restaurar dependencias con renv.
+4. Ejecutar la app.
+5. Que Shiny levante un localhost automáticamente.
+6. Que pueda interactuar con filtros, mapas, gráficos y tablas.
+
+También quiero un workflow manual en GitHub Actions que sirva para comprobar que el proyecto está bien montado. Sé que GitHub Actions no puede abrirme visualmente un localhost en mi navegador local, porque se ejecuta en un runner remoto. Por tanto, NO intentes prometer algo imposible.
+
+Lo que debe hacer el workflow manual es:
+
+- instalar R;
+- restaurar dependencias;
+- generar datos si no existen;
+- comprobar que los scripts cargan;
+- comprobar que la app puede arrancar;
+- ejecutar validaciones básicas;
+- opcionalmente lanzar la app durante unos segundos en el runner para verificar que no crashea;
+- finalizar correctamente.
+
+Además, crea instrucciones claras en el README para ejecutar el localhost en local desde RStudio o terminal.
+
+Estructura esperada del repositorio
+-----------------------------------
+
+Crea una estructura similar a esta, ajustándola si lo consideras mejor:
+
+R-Studio-Shiny/
+│
+├── app.R
+├── README.md
+├── renv.lock
+├── .gitignore
+├── .Rprofile
+│
+├── R/
+│   ├── config.R
+│   ├── data_load.R
+│   ├── data_generate.R
+│   ├── data_prepare.R
+│   ├── filters.R
+│   ├── kpis.R
+│   ├── maps.R
+│   ├── plots.R
+│   ├── tables.R
+│   ├── utils.R
+│   ├── modules_filters.R
+│   ├── modules_kpis.R
+│   ├── modules_map.R
+│   ├── modules_plots.R
+│   ├── modules_table.R
+│   └── modules_download.R
+│
+├── data/
+│   ├── raw/
+│   └── processed/
+│
+├── scripts/
+│   ├── 00_install_packages.R
+│   ├── 01_generate_demo_data.R
+│   ├── 02_validate_data.R
+│   └── 03_smoke_test_app.R
+│
+├── tests/
+│   └── testthat/
+│       ├── test_data.R
+│       ├── test_kpis.R
+│       └── test_filters.R
+│
+├── www/
+│   ├── custom.css
+│   └── logo_placeholder.txt
+│
+└── .github/
+    └── workflows/
+        └── shiny-check.yml
+
+Si consideras que algunos nombres pueden mejorar, puedes cambiarlos, pero mantén una estructura profesional y fácil de entender.
+
+Requisitos funcionales de la app
+--------------------------------
+
+La app debe tener una interfaz clara en catalán.
+
+Título principal:
+
+"Indicadors Territorials de Salut i Demografia"
+
+Subtítulo:
+
+"Aplicació demostrativa en R Shiny per a l'exploració d'indicadors territorials"
+
+Debe tener un sidebar o panel lateral con filtros:
+
+- Any: selector de año, por ejemplo 2020, 2021, 2022, 2023, 2024.
+- Comarca: selector múltiple.
+- Municipi: selector múltiple dependiente de la comarca seleccionada.
+- Indicador: selector, por ejemplo:
+  - Població
+  - Renda mitjana
+  - Taxa d'envelliment
+  - Incidència sanitària
+  - Índex de vulnerabilitat
+  - Accessibilitat a serveis
+- Botón "Actualitzar".
+- Botón "Reiniciar filtres".
+
+Debe haber KPIs principales:
+
+- Nombre de municipis seleccionats.
+- Població total.
+- Renda mitjana ponderada.
+- Taxa d'envelliment mitjana.
+- Incidència sanitària mitjana.
+- Índex de vulnerabilitat mitjà.
+
+Debe haber un mapa interactivo con leaflet:
+
+- Polígonos territoriales ficticios o puntos si es más sencillo.
+- Preferiblemente usar sf.
+- Colorear por indicador seleccionado.
+- Tooltip con municipio, comarca, año e indicadores.
+- Leyenda.
+- Zoom.
+- Vista limpia.
+
+Si generar polígonos realistas es demasiado complejo, puedes crear geometrías sf simuladas en forma de cuadrícula territorial. Lo importante es demostrar integración con sf + leaflet.
+
+Debe haber gráficos con plotly:
+
+- Evolución temporal del indicador seleccionado.
+- Ranking de municipios.
+- Comparación por comarca.
+- Distribución del indicador seleccionado.
+
+Debe haber tabla con reactable:
+
+- Tabla filtrable, ordenable y legible.
+- Mostrar municipio, comarca, año e indicadores.
+- Formato numérico correcto.
+- Resaltar algunas columnas si tiene sentido.
+
+Debe haber descarga:
+
+- Botón para descargar CSV de los datos filtrados.
+- Nombre de archivo con fecha.
+
+Debe haber una pestaña de metodología:
+
+- Explicar que los datos son simulados.
+- Explicar el objetivo de la app.
+- Explicar las variables.
+- Explicar limitaciones.
+- Explicar cómo se estructura el código.
+- Texto en catalán.
+
+Diseño
+------
+
+Quiero una app sobria, profesional y limpia.
+
+Estilo:
+
+- Minimalista.
+- Blanco/gris/azul oscuro.
+- Sin colores chillones.
+- Tarjetas para KPIs.
+- Buen espaciado.
+- Mapa y gráficos bien organizados.
+- Interfaz clara para un cliente no técnico.
+
+Usa CSS en www/custom.css.
+
+Puedes usar bslib, shinyWidgets o shinydashboard si lo consideras oportuno, pero no hagas la app innecesariamente compleja.
+
+Datos
+-----
+
+Puedes crear datos sintéticos.
+
+Necesito que generes un script reproducible:
+
+scripts/01_generate_demo_data.R
+
+Ese script debe crear:
+
+1. Un dataset tabular de indicadores:
+   - municipi_id
+   - municipi
+   - comarca
+   - any
+   - poblacio
+   - renda_mitjana
+   - taxa_envelliment
+   - incidencia_sanitaria
+   - index_vulnerabilitat
+   - accessibilitat_serveis
+
+2. Un objeto geoespacial sf:
+   - geometría territorial ficticia;
+   - municipi_id;
+   - municipi;
+   - comarca.
+
+Puedes guardar los datos procesados en:
+
+data/processed/indicadors_territorials.rds
+data/processed/geometries_municipals.rds
+
+Los datos deben estar suficientemente bien creados para que los filtros, mapas, tablas y gráficos tengan sentido.
+
+Ejemplo de lógica:
+
+- 40-80 municipios ficticios.
+- 6-10 comarcas.
+- 5 años.
+- Variables generadas con coherencia:
+  - población positiva;
+  - renta media entre 18.000 y 45.000;
+  - envejecimiento entre 10% y 35%;
+  - incidencia sanitaria entre 50 y 500;
+  - vulnerabilidad entre 0 y 100;
+  - accesibilidad entre 0 y 100.
+- Crear cierta correlación entre variables:
+  - mayor vulnerabilidad puede relacionarse con menor renta;
+  - mayor envejecimiento puede relacionarse con mayor incidencia;
+  - mejor accesibilidad puede relacionarse con menor vulnerabilidad.
+
+Código
+------
+
+Quiero código profesional y mantenible.
+
+Evita meterlo todo en app.R.
+
+app.R debe ser el punto de entrada, pero la lógica debe estar modularizada en archivos dentro de R/.
+
+Usa módulos Shiny cuando tenga sentido:
+
+- filters UI/server.
+- KPIs UI/server.
+- map UI/server.
+- plots UI/server.
+- table UI/server.
+- download UI/server.
+
+Usa funciones auxiliares para:
+
+- cargar datos;
+- preparar datos;
+- aplicar filtros;
+- calcular KPIs;
+- crear paletas;
+- formatear números;
+- generar gráficos;
+- generar mapas.
+
+Incluye comentarios útiles, pero no llenes el código de comentarios obvios.
+
+Debe ser fácil para alguien abrir el repositorio y entender:
+
+- dónde están los datos;
+- dónde están los filtros;
+- dónde está el mapa;
+- dónde están los gráficos;
+- dónde está la tabla;
+- cómo se ejecuta todo.
+
+Reactividad
+-----------
+
+La app debe demostrar programación reactiva real:
+
+- reactive() para datos filtrados.
+- observeEvent() para botón de actualización si lo consideras.
+- updateSelectInput() para actualizar municipios según comarca.
+- renderLeaflet() o leafletProxy() si lo consideras.
+- renderPlotly().
+- renderReactable().
+- downloadHandler().
+
+Evita recalcular todo innecesariamente.
+
+Carga los datos una sola vez al inicio.
+
+Si usas un botón "Actualitzar", que el filtrado principal dependa de ese botón.
+
+renv
+----
+
+El proyecto debe usar renv.
+
+Necesito que incluyas:
+
+- instrucciones para inicializar/restaurar renv;
+- renv.lock si puedes generarlo;
+- .Rprofile si corresponde.
+
+Si no puedes generar un renv.lock perfecto por limitaciones del entorno, deja los scripts y el README preparados para que yo pueda ejecutar:
+
+renv::init()
+renv::snapshot()
+
+Pero intenta dejarlo lo más completo posible.
+
+Paquetes esperados
+------------------
+
+Usa paquetes como:
+
+- shiny
+- bslib
+- dplyr
+- tidyr
+- readr
+- purrr
+- stringr
+- lubridate
+- ggplot2
+- plotly
+- leaflet
+- sf
+- reactable
+- scales
+- htmltools
+- shinyWidgets
+- testthat
+- renv
+
+Puedes añadir otros si son útiles, pero evita dependencias innecesarias.
+
+GitHub Actions
+--------------
+
+Crea un workflow en:
+
+.github/workflows/shiny-check.yml
+
+El workflow debe ser manual mediante workflow_dispatch.
+
+También puede ejecutarse en push o pull_request si lo consideras, pero quiero que tenga ejecución manual.
+
+Debe:
+
+1. Checkout del repositorio.
+2. Configurar R.
+3. Instalar dependencias del sistema necesarias para sf en Ubuntu.
+4. Restaurar paquetes con renv si existe renv.lock.
+5. Ejecutar scripts/01_generate_demo_data.R.
+6. Ejecutar scripts/02_validate_data.R.
+7. Ejecutar tests con testthat.
+8. Ejecutar scripts/03_smoke_test_app.R para comprobar que app.R carga y la app puede arrancar sin errores básicos.
+
+IMPORTANTE:
+No intentes abrir un navegador en GitHub Actions. Simplemente valida que la app se puede iniciar. Puedes usar shiny::runApp(..., launch.browser = FALSE) dentro de una lógica controlada, o una validación equivalente que no bloquee indefinidamente.
+
+El workflow debe estar bien comentado.
+
+README
+------
+
+El README debe ser muy profesional.
+
+Debe incluir:
+
+1. Título del proyecto.
+2. Descripción breve.
+3. Captura placeholder o explicación de la app.
+4. Funcionalidades.
+5. Stack tecnológico.
+6. Estructura del repositorio.
+7. Instalación local.
+8. Ejecución local.
+9. Restauración de dependencias con renv.
+10. Generación de datos demo.
+11. Ejecución de tests.
+12. Uso del workflow manual de GitHub Actions.
+13. Explicación de que GitHub Actions valida la app, pero el localhost se ejecuta en local.
+14. Roadmap.
+15. Buenas prácticas incluidas.
+16. Nota de que los datos son simulados.
+17. Contacto o autor:
+    Arnau Sastre
+    Data & AI / Statistics / Decision Systems
+
+Incluye comandos claros:
+
+git clone ...
+cd R-Studio-Shiny
+Rscript scripts/01_generate_demo_data.R
+Rscript -e "renv::restore()"
+Rscript -e "shiny::runApp('.', host = '127.0.0.1', port = 3838)"
+
+También indica cómo ejecutarlo desde RStudio:
+
+- abrir proyecto;
+- ejecutar app.R;
+- pulsar Run App.
+
+Tests
+-----
+
+Crea tests básicos con testthat:
+
+- verificar que los datos generados existen;
+- verificar que las columnas esperadas están;
+- verificar que no hay población negativa;
+- verificar que los años son correctos;
+- verificar que los indicadores están en rangos razonables;
+- verificar que las funciones de filtro devuelven datos;
+- verificar que las funciones KPI devuelven resultados numéricos.
+
+No hace falta una suite enorme, pero sí algo serio.
+
+Validaciones
+------------
+
+Crea scripts/02_validate_data.R para validar los datos.
+
+Debe comprobar:
+
+- existencia de archivos RDS;
+- columnas requeridas;
+- rangos de variables;
+- consistencia entre geometrías y datos;
+- que municipi_id existe en ambos datasets;
+- que no hay duplicados graves.
+
+Smoke test
+----------
+
+Crea scripts/03_smoke_test_app.R.
+
+Debe comprobar que:
+
+- app.R existe;
+- paquetes principales cargan;
+- archivos de datos existen o se generan;
+- las funciones principales se pueden sourcear;
+- la app se puede construir sin errores.
+
+Evita que el smoke test quede colgado ejecutando una app infinita. Si usas runApp, hazlo con timeout o usa una estrategia segura. Si no es práctico, valida la construcción de la app y documenta el motivo.
+
+Git
+---
+
+Después de crear todos los archivos, quiero que hagas:
+
+git status
+git add .
+git commit -m "Initial R Shiny territorial indicators app"
+git push origin main
+
+Antes de hacer push, comprueba que estás en la rama correcta y que el remoto está configurado.
+
+Si no puedes hacer push porque faltan credenciales, deja el repositorio listo y explícame exactamente qué comandos debo ejecutar yo.
+
+Calidad esperada
+----------------
+
+No quiero un ejemplo cutre de 20 líneas.
+
+Quiero un repositorio que parezca serio y enseñable a un cliente o empresa.
+
+La app debe funcionar realmente.
+
+La prioridad es:
+
+1. Que ejecute.
+2. Que el código esté organizado.
+3. Que visualmente sea presentable.
+4. Que demuestre Shiny, reactividad, leaflet, plotly, reactable y sf.
+5. Que el README sea claro.
+6. Que el workflow valide el proyecto.
+
+No sobreingenierices.
+
+No crees una arquitectura absurda.
+
+Pero tampoco dejes todo plano en un único archivo.
+
+Tono de los textos de la app
+----------------------------
+
+Todo el texto visible en la aplicación debe estar en catalán.
+
+Ejemplos:
+
+- "Filtres"
+- "Indicador"
+- "Any"
+- "Comarca"
+- "Municipi"
+- "Actualitzar"
+- "Reiniciar filtres"
+- "Mapa territorial"
+- "Evolució temporal"
+- "Rànquing de municipis"
+- "Taula d'indicadors"
+- "Descarregar dades"
+- "Metodologia"
+- "Els valors mostrats corresponen a dades simulades amb finalitats demostratives."
+
+Entregable final
+----------------
+
+Al terminar, quiero que me dejes el repositorio con:
+
+- app funcional;
+- datos demo;
+- scripts;
+- tests;
+- workflow;
+- README;
+- CSS;
+- estructura modular;
+- commit realizado;
+- push realizado si es posible.
+
+Después de ejecutar todo, explícame en un resumen breve:
+
+1. Qué has creado.
+2. Cómo ejecuto la app en local.
+3. Cómo lanzo el workflow manual.
+4. Qué archivos son los más importantes.
+5. Qué mejoras futuras podría añadir.
+
+Trabaja directamente sobre el repositorio actual y no me hagas preguntas salvo que sea estrictamente necesario.
