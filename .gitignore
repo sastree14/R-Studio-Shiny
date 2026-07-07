@@ -1,0 +1,30 @@
+# R
+.Rhistory
+.RData
+.Ruserdata
+.Rproj.user/
+
+# renv
+renv/library/
+renv/local/
+renv/cellar/
+renv/lock/
+renv/python/
+renv/sandbox/
+renv/staging/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+*.swp
+
+# Logs
+*.log
+
+# Datos generados localmente (se recrean con los scripts, pero
+# mantenemos versionados los .rds finales usados por la app)
+data/raw/*
+!data/raw/.gitkeep

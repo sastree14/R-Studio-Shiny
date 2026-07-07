@@ -1,0 +1,5 @@
+Aquest fitxer es un placeholder per a un futur logotip de l'aplicacio
+(per exemple, www/logo.png), referenciat des de la capcalera de la UI.
+
+Substitueix aquest fitxer per un logotip real i actualitza app.R per
+mostrar-lo a la barra de navegacio si es desitja.

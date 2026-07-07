@@ -1,0 +1,138 @@
+/* custom.css
+   Estil visual de l'aplicacio "Indicadors Territorials de Salut i
+   Demografia". Disseny sobri, minimalista, en tons blanc / gris /
+   blau fosc, pensat per a un client no tecnic. */
+
+:root {
+  --color-primary: #1B2A4A;
+  --color-secondary: #4A6FA5;
+  --color-background: #F5F6F8;
+  --color-muted: #8A94A6;
+  --color-border: #E4E7EC;
+}
+
+body {
+  background-color: var(--color-background);
+}
+
+.navbar {
+  background-color: var(--color-primary) !important;
+}
+
+.navbar .navbar-brand,
+.navbar-note {
+  color: #FFFFFF !important;
+  font-weight: 600;
+}
+
+.navbar-note {
+  font-size: 0.85rem;
+  opacity: 0.85;
+  padding-right: 0.5rem;
+}
+
+.sidebar-title {
+  color: var(--color-primary);
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.sidebar-note {
+  font-size: 0.78rem;
+  color: var(--color-muted);
+  font-style: italic;
+}
+
+.filter-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.app-subtitle {
+  color: var(--color-muted);
+  font-size: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.kpi-card {
+  background-color: #FFFFFF;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  padding: 1rem 1.1rem;
+  box-shadow: 0 1px 3px rgba(27, 42, 74, 0.06);
+}
+
+.kpi-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  line-height: 1.2;
+}
+
+.kpi-label {
+  font-size: 0.8rem;
+  color: var(--color-muted);
+  margin-top: 0.25rem;
+}
+
+.download-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 0.75rem;
+}
+
+.card-panel {
+  background-color: #FFFFFF;
+  border-radius: 8px;
+  padding: 0.5rem;
+}
+
+.panel-title {
+  color: var(--color-primary);
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0.25rem 0 0.75rem 0;
+}
+
+.plots-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+  gap: 1rem;
+}
+
+.methodology-panel {
+  max-width: 900px;
+  padding: 1rem 0.5rem;
+  line-height: 1.55;
+}
+
+.methodology-panel h4 {
+  color: var(--color-primary);
+  margin-top: 1.5rem;
+}
+
+.methodology-panel code {
+  background-color: var(--color-background);
+  color: var(--color-primary);
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+}
+
+.btn-primary {
+  background-color: var(--color-primary) !important;
+  border-color: var(--color-primary) !important;
+}
+
+.btn-outline-secondary {
+  color: var(--color-secondary) !important;
+  border-color: var(--color-secondary) !important;
+}

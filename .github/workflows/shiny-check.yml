@@ -1,0 +1,119 @@
+name: Shiny check
+
+# Workflow de validacio del projecte R Shiny "Indicadors Territorials
+# de Salut i Demografia".
+#
+# IMPORTANT: aquest workflow NO obre cap navegador ni exposa cap
+# localhost visible per a l'usuari — GitHub Actions s'executa en un
+# runner remot i no pot mostrar-te la app al teu navegador local. El
+# seu unic objectiu es comprovar, de manera automatitzada, que el
+# projecte instal·la les dependencies i s'executa correctament. Per
+# provar la app de veritat cal executar-la en local (vegeu el README).
+#
+# Es pot llancar manualment des de la pestanya "Actions" de GitHub
+# (workflow_dispatch), i tambe s'executa automaticament en push/PR
+# sobre la branca main per detectar regressions com mes aviat millor.
+
+on:
+  workflow_dispatch: {}
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    env:
+      RENV_PATHS_ROOT: ~/.local/share/renv
+
+    steps:
+      # 1. Checkout del repositori
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Configurar R
+      - name: Set up R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: "4.4.1"
+          use-public-rspm: true
+
+      # 3. Dependencies de sistema necessaries per a sf i altres paquets
+      #    geoespacials/grafics a Ubuntu.
+      - name: Install system dependencies for sf and friends
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libudunits2-dev \
+            libgdal-dev \
+            libgeos-dev \
+            libproj-dev \
+            libssl-dev \
+            libcurl4-openssl-dev \
+            libfontconfig1-dev \
+            libharfbuzz-dev \
+            libfribidi-dev \
+            libfreetype6-dev \
+            libpng-dev \
+            libtiff5-dev \
+            libjpeg-dev
+
+      # 4. Cache de renv per accelerar execucions successives
+      - name: Cache renv packages
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.RENV_PATHS_ROOT }}
+          key: ${{ runner.os }}-renv-${{ hashFiles('renv.lock') }}
+          restore-keys: ${{ runner.os }}-renv-
+
+      # 5. Restaurar dependencies: fa servir renv si hi ha renv.lock,
+      #    o be instal·la els paquets directament com a alternativa.
+      - name: Restore dependencies
+        run: |
+          if [ -f "renv.lock" ]; then
+            echo "S'ha trobat renv.lock: restaurant amb renv::restore()"
+            Rscript -e 'if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv"); renv::restore(prompt = FALSE)'
+          else
+            echo "No hi ha renv.lock: instal·lant paquets amb scripts/00_install_packages.R"
+            Rscript scripts/00_install_packages.R
+          fi
+
+      # 6. Generar les dades demo (si no existeixen ja al repositori)
+      - name: Generate demo data
+        run: Rscript scripts/01_generate_demo_data.R
+
+      # 7. Validar les dades generades
+      - name: Validate data
+        run: Rscript scripts/02_validate_data.R
+
+      # 8. Executar els tests testthat
+      - name: Run testthat tests
+        run: Rscript tests/testthat.R
+
+      # 9. Smoke test: comprova que app.R carrega i que la app es pot
+      #    construir (UI + server) sense errors.
+      - name: Smoke test app construction
+        run: Rscript scripts/03_smoke_test_app.R
+
+      # 10. Pas opcional: llanca la app real durant uns segons en el
+      #     runner nomes per comprovar que no crasha en arrencar.
+      #     S'atura automaticament amb `timeout`; el codi 124 (timeout
+      #     assolit) es el resultat ESPERAT quan la app arrenca be i
+      #     es manté viva, per aixo no es tracta com un error.
+      - name: Launch app briefly to verify it does not crash on startup
+        run: |
+          set +e
+          timeout 20s Rscript -e "shiny::runApp('.', host = '127.0.0.1', port = 3838, launch.browser = FALSE)" > shiny_launch.log 2>&1
+          exit_code=$?
+          echo "Exit code de l'arrencada: $exit_code"
+          cat shiny_launch.log
+          if [ $exit_code -ne 0 ] && [ $exit_code -ne 124 ]; then
+            echo "La app ha fallat en arrencar (exit code $exit_code)."
+            exit 1
+          fi
+          echo "La app ha arrencat correctament (s'ha aturat despres del timeout de verificacio)."
+
+      - name: Summary
+        run: echo "Validacio del projecte R Shiny completada correctament."
